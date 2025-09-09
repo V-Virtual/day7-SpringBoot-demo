@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -36,5 +37,9 @@ public class EmployeeController {
                 .filter(emp -> gender.equals(emp.getGender()))
                 .collect(Collectors.toList());
         return result;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
     }
 }

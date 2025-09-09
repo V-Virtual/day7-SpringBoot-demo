@@ -1,5 +1,6 @@
 package org.example.demo.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +19,14 @@ class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private EmployeeController employeeController;
+
+    @BeforeEach
+    void setUp() {
+        employeeController.getEmployees().clear();
+    }
 
     @Test
     void should_return_employee_name_when_update_given_a_valid_body() throws Exception {
@@ -54,7 +63,7 @@ class EmployeeControllerTest {
                      "name": "Lily",
                      "age": 20,
                      "gender": "Female",
-                     "salary": 8000
+                     "salary": 8000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -68,5 +77,56 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.age").value(32))
                 .andExpect(jsonPath("$.gender").value("Male"))
                 .andExpect(jsonPath("$.salary").value(5000.0));
+    }
+
+    @Test
+    void should_return_employee_list_when_query_employee_given_employee_gender() throws Exception {
+        String requestBody1 = """
+                {
+                    "name": "John Smith",
+                    "age": 32,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody1));
+        String requestBody2 = """
+                {
+                     "name": "Lily",
+                     "age": 20,
+                     "gender": "Female",
+                     "salary": 8000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody2));
+        String requestBody3 = """
+                {
+                     "name": "Lucy",
+                     "age": 25,
+                     "gender": "Female",
+                     "salary": 10000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody3));
+        mockMvc.perform(get("/employees?gender=Female")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(2))
+                .andExpect(jsonPath("$[0].name").value("Lily"))
+                .andExpect(jsonPath("$[0].age").value(20))
+                .andExpect(jsonPath("$[0].gender").value("Female"))
+                .andExpect(jsonPath("$[0].salary").value(8000.0))
+                .andExpect(jsonPath("$[1].id").value(3))
+                .andExpect(jsonPath("$[1].name").value("Lucy"))
+                .andExpect(jsonPath("$[1].age").value(25))
+                .andExpect(jsonPath("$[1].gender").value("Female"))
+                .andExpect(jsonPath("$[1].salary").value(10000.0));
     }
 }
