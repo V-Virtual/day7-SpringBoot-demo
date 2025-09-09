@@ -133,4 +133,22 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$[0].name").value("tesla"));
     }
 
+    @Test
+    void should_return_company_when_getCompanyById_given_exist_id() throws Exception {
+        String requestBody = """
+                {
+                    "name": "google"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody));
+
+        mockMvc.perform(get("/companies/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("google"));
+    }
+
 }
