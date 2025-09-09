@@ -9,8 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -151,4 +150,27 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.name").value("google"));
     }
 
+    @Test
+    void should_return_company_when_updateCompany_given_exist_id_and_valid_body() throws Exception {
+        String requestBody = """
+                {
+                    "name": "google"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody));
+
+        String updateRequestBody = """
+                {
+                    "name": "alphabet"
+                }
+                """;
+        mockMvc.perform(put("/companies/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateRequestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("alphabet"));
+    }
 }

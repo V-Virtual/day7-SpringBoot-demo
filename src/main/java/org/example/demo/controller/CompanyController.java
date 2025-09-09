@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -46,5 +47,16 @@ public class CompanyController {
 
     public List<Company> getCompanies() {
         return companies;
+    }
+
+    @PutMapping("companies/{id}")
+    public Company updateCompany(@PathVariable long id, @RequestBody Map<String, Object> updates){
+        Company company = getCompany(id);
+        if (company != null) {
+            if (updates.containsKey("name")) {
+                company.setName((String) updates.get("name"));
+            }
+        }
+        return company;
     }
 }
