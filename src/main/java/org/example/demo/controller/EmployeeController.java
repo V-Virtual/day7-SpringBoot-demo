@@ -44,6 +44,26 @@ public class EmployeeController {
         return employees;
     }
 
+    @PutMapping("/employees/{id}")
+    public Employee updateEmployee(@PathVariable long id, @RequestBody Map<String, Object> updates) {
+        Employee employee = getEmployee(id);
+        if (employee != null) {
+            if (updates.containsKey("name")) {
+                employee.setName((String) updates.get("name"));
+            }
+            if (updates.containsKey("age")) {
+                employee.setAge((Integer) updates.get("age"));
+            }
+            if (updates.containsKey("gender")) {
+                employee.setGender((String) updates.get("gender"));
+            }
+            if (updates.containsKey("salary")) {
+                employee.setSalary((Double) updates.get("salary"));
+            }
+        }
+        return employee;
+    }
+
     public List<Employee> getEmployees() {
         return employees;
     }
