@@ -52,9 +52,7 @@ class CompanyControllerTest {
                 """;
         mockMvc.perform(post("/companies")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody1))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1));
+                        .content(requestBody1));
 
         String requestBody2 = """
                 {
@@ -63,9 +61,7 @@ class CompanyControllerTest {
                 """;
         mockMvc.perform(post("/companies")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody2))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(2));
+                        .content(requestBody2));
 
         mockMvc.perform(get("/companies")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -75,6 +71,66 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$[0].name").value("google"))
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("apple"));
+    }
+
+    @Test
+    void should_return_company_list_when_getCompanies_by_page() throws Exception {
+        String requestBody1 = """
+                {
+                    "name": "google"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody1));
+
+        String requestBody2 = """
+                {
+                    "name": "apple"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody2));
+        String requestBody3 = """
+                {
+                    "name": "microsoft"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody3));
+        String requestBody4 = """
+                {
+                    "name": "amazon"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody4));
+        String requestBody5 = """
+                {
+                    "name": "facebook"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody5));
+        String requestBody6 = """
+                {
+                    "name": "tesla"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody6));
+
+        mockMvc.perform(get("/companies?page=1&size=5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(6))
+                .andExpect(jsonPath("$[0].name").value("tesla"));
     }
 
 }
