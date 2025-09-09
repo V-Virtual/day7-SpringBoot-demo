@@ -1,6 +1,7 @@
 package org.example.demo.controller;
 
 import org.example.demo.model.Employee;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -62,6 +63,12 @@ public class EmployeeController {
             }
         }
         return employee;
+    }
+
+    @DeleteMapping("/employees/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable long id) {
+        employees.removeIf(emp -> emp.getId() == id);
     }
 
     public List<Employee> getEmployees() {
