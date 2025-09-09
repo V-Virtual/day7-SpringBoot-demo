@@ -28,7 +28,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void should_return_employee_name_when_update_given_a_valid_body() throws Exception {
+    void should_return_employee_when_create_given_a_valid_body() throws Exception {
         String requestBody = """
                 {
                     "name": "John Smith",
