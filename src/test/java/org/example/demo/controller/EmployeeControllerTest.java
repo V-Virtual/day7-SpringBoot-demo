@@ -153,7 +153,7 @@ class EmployeeControllerTest {
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody2));
-        mockMvc.perform(get("/employees-all")
+        mockMvc.perform(get("/employees")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -221,5 +221,84 @@ class EmployeeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    void should_return_employee_list_when_get_employees_given_page_and_size() throws Exception {
+        String requestBody1 = """
+                {
+                    "name": "John Smith",
+                    "age": 32,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody1));
+        String requestBody2 = """
+                {
+                     "name": "Lily",
+                     "age": 20,
+                     "gender": "Female",
+                     "salary": 8000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody2));
+        String requestBody3 = """
+                {
+                     "name": "Lucy",
+                     "age": 25,
+                     "gender": "Female",
+                     "salary": 10000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody3));
+        String requestBody4 = """
+                {
+                    "name": "Frank",
+                    "age": 32,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody4));
+        String requestBody5 = """
+                {
+                     "name": "Jake",
+                     "age": 20,
+                     "gender": "Female",
+                     "salary": 8000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody5));
+        String requestBody6 = """
+                {
+                     "name": "Paul",
+                     "age": 25,
+                     "gender": "Female",
+                     "salary": 10000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody6));
+        mockMvc.perform(get("/employees?page=1&size=5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(6))
+                .andExpect(jsonPath("$[0].name").value("Paul"))
+                .andExpect(jsonPath("$[0].age").value(25))
+                .andExpect(jsonPath("$[0].gender").value("Female"))
+                .andExpect(jsonPath("$[0].salary").value(10000.0));
     }
 }

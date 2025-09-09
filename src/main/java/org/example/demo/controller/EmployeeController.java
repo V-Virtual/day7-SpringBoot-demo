@@ -4,6 +4,7 @@ import org.example.demo.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,17 +34,36 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public List<Employee> queryEmployeeByGender(@RequestParam String gender) {
-        List<Employee> result = employees.stream()
-                .filter(emp -> gender.equals(emp.getGender()))
-                .collect(Collectors.toList());
+    public List<Employee> getEmployees(
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        List<Employee> result = employees;
+        if (gender != null) {
+            result = result.stream()
+                    .filter(emp -> gender.equals(emp.getGender()))
+                    .collect(Collectors.toList());
+        }
+        if (page != null && size != null) {
+            int fromIndex = Math.min(page * size, result.size());
+            int toIndex = Math.min(fromIndex + size, result.size());
+            result = result.subList(fromIndex, toIndex);
+        }
         return result;
     }
 
-    @GetMapping("/employees-all")
-    public List<Employee> getAllEmployees() {
-        return employees;
-    }
+//    @GetMapping("/employees")
+//    public List<Employee> queryEmployeeByGender(@RequestParam String gender) {
+//        List<Employee> result = employees.stream()
+//                .filter(emp -> gender.equals(emp.getGender()))
+//                .collect(Collectors.toList());
+//        return result;
+//    }
+
+//    @GetMapping("/employees")
+//    public List<Employee> getAllEmployees() {
+//        return employees;
+//    }
 
     @PutMapping("/employees/{id}")
     public Employee updateEmployee(@PathVariable long id, @RequestBody Map<String, Object> updates) {
@@ -70,6 +90,13 @@ public class EmployeeController {
     public void deleteEmployee(@PathVariable long id) {
         employees.removeIf(emp -> emp.getId() == id);
     }
+
+//    @GetMapping("/employees")
+//    public List<Employee> getEmployees(int page, int size) {
+//        int fromIndex = Math.min(page * size, employees.size());
+//        int toIndex = Math.min(fromIndex + size, employees.size());
+//        return employees.subList(fromIndex, toIndex);
+//    }
 
     public List<Employee> getEmployees() {
         return employees;
