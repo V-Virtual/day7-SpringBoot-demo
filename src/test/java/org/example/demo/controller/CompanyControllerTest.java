@@ -173,4 +173,24 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("alphabet"));
     }
+
+    @Test
+    void should_return_no_content_when_deleteCompany_given_exist_id() throws Exception {
+        String requestBody = """
+                {
+                    "name": "google"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody));
+
+        mockMvc.perform(delete("/companies/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/companies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
 }
