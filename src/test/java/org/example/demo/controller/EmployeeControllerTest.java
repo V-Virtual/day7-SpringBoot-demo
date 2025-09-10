@@ -35,7 +35,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -52,7 +52,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -76,7 +76,7 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.name").value("John Smith"))
                 .andExpect(jsonPath("$.age").value(32))
                 .andExpect(jsonPath("$.gender").value("Male"))
-                .andExpect(jsonPath("$.salary").value(5000.0));
+                .andExpect(jsonPath("$.salary").value(50000.0));
     }
 
     @Test
@@ -86,7 +86,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -137,7 +137,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -162,7 +162,7 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$[0].name").value("John Smith"))
                 .andExpect(jsonPath("$[0].age").value(32))
                 .andExpect(jsonPath("$[0].gender").value("Male"))
-                .andExpect(jsonPath("$[0].salary").value(5000.0))
+                .andExpect(jsonPath("$[0].salary").value(50000.0))
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("Lily"))
                 .andExpect(jsonPath("$[1].age").value(20))
@@ -177,7 +177,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -209,7 +209,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -231,7 +231,7 @@ class EmployeeControllerTest {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -264,7 +264,7 @@ class EmployeeControllerTest {
                     "name": "Frank",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         mockMvc.perform(post("/employees")
@@ -308,6 +308,57 @@ class EmployeeControllerTest {
         mockMvc.perform(get("/employees/{id}", 5)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    void should_throw_exception_when_create_employee_given_employee_with_age_17() throws Exception {
+        String requestBody = """
+                {
+                    "name": "John Smith",
+                    "age": 17,
+                    "gender": "Male",
+                    "salary": 18000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    void should_throw_exception_when_create_employee_given_employee_with_age_66() throws Exception {
+        String requestBody = """
+                {
+                    "name": "John Smith",
+                    "age": 66,
+                    "gender": "Male",
+                    "salary": 18000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    void should_throw_exception_when_create_given_employee_with_age_above_30_and_salary_below_20000() throws Exception {
+        String requestBody = """
+                {
+                    "name": "John Smith",
+                    "age": 32,
+                    "gender": "Male",
+                    "salary": 18000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNotAcceptable())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 }

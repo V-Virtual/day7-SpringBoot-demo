@@ -22,18 +22,24 @@ public class EmployeeController {
     @PostMapping
     @ResponseStatus(CREATED)
     public Employee createEmployee(@RequestBody Employee employee) {
-        return employeeService.createEmployee(employee);
+        Employee createdEmployee;
+        try {
+            createdEmployee = employeeService.createEmployee(employee);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
+        }
+        return createdEmployee;
     }
 
     @GetMapping("/{id}")
     public Employee getEmployee(@PathVariable long id) {
-        Employee employee;
+        Employee getEmployee;
         try {
-            employee = employeeService.getEmployee(id);
+            getEmployee = employeeService.getEmployee(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        return employee;
+        return getEmployee;
     }
 
     @GetMapping

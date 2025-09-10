@@ -21,24 +21,24 @@ class EmployeeServiceTest {
     private EmployeeService employeeService;
 
     @Test
-    void should_throw_extension_when_create_given_employee_with_age_17() {
+    void should_throw_exception_when_create_given_employee_with_age_17() {
         Employee employee = new Employee();
         employee.setName("John");
         employee.setAge(17);
         employee.setGender("Male");
         employee.setSalary(50000.0);
-        assertThrows(EmployeeNotAmongLegalAgeException.class, () -> employeeService.createEmployee(employee));
+        assertThrows(EmployeeNotAmongLegalException.class, () -> employeeService.createEmployee(employee));
         verify(employeeRepository, never()).save(employee);
     }
 
     @Test
-    void should_throw_extension_when_create_given_employee_with_age_66(){
+    void should_throw_exception_when_create_given_employee_with_age_66(){
         Employee employee = new Employee();
         employee.setName("John");
         employee.setAge(66);
         employee.setGender("Male");
         employee.setSalary(50000.0);
-        assertThrows(EmployeeNotAmongLegalAgeException.class, () -> employeeService.createEmployee(employee));
+        assertThrows(EmployeeNotAmongLegalException.class, () -> employeeService.createEmployee(employee));
         verify(employeeRepository, never()).save(employee);
     }
 
@@ -63,5 +63,16 @@ class EmployeeServiceTest {
         });
         assertEquals("Employee with id 5 not found", exception.getMessage());
         verify(employeeRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void should_throw_exception_when_create_given_employee_with_age_above_30_and_salary_below_20000() {
+        Employee employee = new Employee();
+        employee.setName("John");
+        employee.setAge(35);
+        employee.setGender("gender");
+        employee.setSalary(15000.0);
+        assertThrows(EmployeeNotAmongLegalException.class, () -> employeeService.createEmployee(employee));
+        verify(employeeRepository, never()).save(employee);
     }
 }
