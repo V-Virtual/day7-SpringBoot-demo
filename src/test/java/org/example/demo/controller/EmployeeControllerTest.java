@@ -1,5 +1,6 @@
 package org.example.demo.controller;
 
+import org.example.demo.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,11 @@ class EmployeeControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private EmployeeController employeeController;
+    private EmployeeService employeeService;
 
     @BeforeEach
     void setUp() {
-        employeeController.setUp();
+        employeeService.setUp();
     }
 
     @Test

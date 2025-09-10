@@ -14,7 +14,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/companies")
 public class CompanyController {
 
-    private int id = 0;
+    private long id = 0;
     private final List<Company> companies = new ArrayList<>();
 
     @PostMapping
