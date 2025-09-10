@@ -87,4 +87,23 @@ class EmployeeServiceTest {
         verify(employeeRepository, never()).deleteEmployee(any(Employee.class));
     }
 
+    @Test
+    void should_throw_exception_when_update_employee_given_non_existing_id() {
+        Employee employee = new Employee();
+        employee.setName("John");
+        employee.setAge(35);
+        employee.setGender("Male");
+        employee.setSalary(15000.0);
+        employee.setActiveStatus(false);
+        when(employeeRepository.findById(anyLong())).thenReturn(employee);
+        Exception exception = assertThrows(EmployeeNotAmongLegalException.class, () -> {
+            employeeService.updateEmployee(1, null);
+        });
+        assertEquals("Update failed, the Employee has already left the company", exception.getMessage());
+        verify(employeeRepository, times(1)).findById(anyLong());
+        verify(employeeRepository, never()).updateName(any(Employee.class), anyString());
+        verify(employeeRepository, never()).updateAge(any(Employee.class), anyInt());
+        verify(employeeRepository, never()).updateGender(any(Employee.class), anyString());
+        verify(employeeRepository, never()).updateSalary(any(Employee.class), anyDouble());
+    }
 }

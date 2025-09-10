@@ -368,4 +368,34 @@ class EmployeeControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Employee with id 5 not found"));
     }
+
+    @Test
+    void should_throw_exception_when_update_employee_given_non_existing_employee_id() throws Exception {
+        String requestBody = """
+                {
+                    "name": "John Smith",
+                    "age": 32,
+                    "gender": "Male",
+                    "salary": 50000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+        mockMvc.perform(delete("/employees/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON));
+        String requestBody2 = """
+                {
+                     "name": "Lily",
+                     "age": 20,
+                     "gender": "Female",
+                     "salary": 8000.0
+                }
+                """;
+        mockMvc.perform(put("/employees/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody2))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Update failed, the Employee has already left the company"));
+    }
 }

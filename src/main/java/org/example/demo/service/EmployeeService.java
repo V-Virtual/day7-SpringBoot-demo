@@ -44,6 +44,12 @@ public class EmployeeService {
 
     public Employee updateEmployee(long id, Map<String, Object> updates) {
         Employee employee = getEmployee(id);
+        if(employee == null){
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found");
+        }
+        if(!employee.isActiveStatus()){
+            throw new EmployeeNotAmongLegalException("Update failed, the Employee has already left the company");
+        }
         employeeRepository.updateName(employee, (String) updates.get("name"));
         employeeRepository.updateAge(employee, (Integer) updates.get("age"));
         employeeRepository.updateGender(employee, (String) updates.get("gender"));

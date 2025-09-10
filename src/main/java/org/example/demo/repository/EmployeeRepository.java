@@ -27,26 +27,23 @@ public class EmployeeRepository {
 
     public Employee findById(long id) {
         return employees.stream()
-                .filter(emp -> emp.getId() == id && emp.isActiveStatus())
+                .filter(emp -> emp.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
     public List<Employee> findAll() {
-        return employees.stream()
-                .filter(Employee::isActiveStatus)
-                .collect(Collectors.toList());
+        return employees;
     }
 
     public List<Employee> findByGender(String gender){
         return employees.stream()
-                .filter(emp -> gender.equals(emp.getGender()) && emp.isActiveStatus())
+                .filter(emp -> gender.equals(emp.getGender()))
                 .collect(Collectors.toList());
     }
 
     public List<Employee> findByPageAndSize(Integer page, Integer size){
         return employees.stream()
-                .filter(Employee::isActiveStatus)
                 .skip((long) page * size)
                 .limit(size)
                 .collect(Collectors.toList());
