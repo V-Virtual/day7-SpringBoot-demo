@@ -70,9 +70,11 @@ class EmployeeServiceTest {
         Employee employee = new Employee();
         employee.setName("John");
         employee.setAge(35);
-        employee.setGender("gender");
+        employee.setGender("Male");
         employee.setSalary(15000.0);
         assertThrows(EmployeeNotAmongLegalException.class, () -> employeeService.createEmployee(employee));
         verify(employeeRepository, never()).save(employee);
     }
+
+
 }

@@ -4,14 +4,14 @@ import org.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,6 +22,8 @@ class EmployeeControllerTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private HttpMessageConverters messageConverters;
 
     @BeforeEach
     void setUp() {
@@ -221,7 +223,7 @@ class EmployeeControllerTest {
         mockMvc.perform(get("/employees/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(content().string("Employee with id 1 not found"));
     }
 
     @Test
@@ -308,7 +310,7 @@ class EmployeeControllerTest {
         mockMvc.perform(get("/employees/{id}", 5)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(content().string("Employee with id 5 not found"));
     }
 
     @Test
@@ -324,8 +326,8 @@ class EmployeeControllerTest {
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Employee age must be between 18 and 65"));
     }
 
     @Test
@@ -341,8 +343,8 @@ class EmployeeControllerTest {
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Employee age must be between 18 and 65"));
     }
 
     @Test
@@ -358,7 +360,7 @@ class EmployeeControllerTest {
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Employee salary cannot be less than 20000 for age over 30"));
     }
 }

@@ -4,6 +4,7 @@ import org.example.demo.model.Employee;
 import org.example.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,24 +23,12 @@ public class EmployeeController {
     @PostMapping
     @ResponseStatus(CREATED)
     public Employee createEmployee(@RequestBody Employee employee) {
-        Employee createdEmployee;
-        try {
-            createdEmployee = employeeService.createEmployee(employee);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
-        }
-        return createdEmployee;
+        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.createEmployee(employee)).getBody();
     }
 
     @GetMapping("/{id}")
     public Employee getEmployee(@PathVariable long id) {
-        Employee getEmployee;
-        try {
-            getEmployee = employeeService.getEmployee(id);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-        return getEmployee;
+        return ResponseEntity.status(HttpStatus.OK).body(employeeService.getEmployee(id)).getBody();
     }
 
     @GetMapping
