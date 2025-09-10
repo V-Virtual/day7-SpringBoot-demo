@@ -76,5 +76,15 @@ class EmployeeServiceTest {
         verify(employeeRepository, never()).save(employee);
     }
 
+    @Test
+    void should_throw_exception_when_delete_employee_given_non_existing_id() {
+        when(employeeRepository.findById(anyLong())).thenReturn(null);
+        Exception exception = assertThrows(EmployeeNotFoundException.class, () -> {
+            employeeService.deleteEmployee(10);
+        });
+        assertEquals("Employee with id 10 not found", exception.getMessage());
+        verify(employeeRepository, times(1)).findById(anyLong());
+        verify(employeeRepository, never()).deleteEmployee(any(Employee.class));
+    }
 
 }

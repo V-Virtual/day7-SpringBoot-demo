@@ -6,6 +6,7 @@ public class Employee {
     private int age;
     private String gender;
     private double salary;
+    private boolean activeStatus;
 
     public long getId() {
         return id;
@@ -45,5 +46,13 @@ public class Employee {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public boolean isActiveStatus() {
+        return activeStatus;
+    }
+
+    public void setActiveStatus(boolean activeStatus) {
+        this.activeStatus = activeStatus;
     }
 }

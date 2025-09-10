@@ -20,29 +20,36 @@ public class EmployeeRepository {
 
     public Employee save(Employee employee) {
         employee.setId(++id);
+        employee.setActiveStatus(true);
         employees.add(employee);
         return employee;
     }
 
     public Employee findById(long id) {
         return employees.stream()
-                .filter(emp -> emp.getId() == id)
+                .filter(emp -> emp.getId() == id && emp.isActiveStatus())
                 .findFirst()
                 .orElse(null);
     }
 
     public List<Employee> findAll() {
-        return employees;
+        return employees.stream()
+                .filter(Employee::isActiveStatus)
+                .collect(Collectors.toList());
     }
 
     public List<Employee> findByGender(String gender){
         return employees.stream()
-                .filter(emp -> gender.equals(emp.getGender()))
+                .filter(emp -> gender.equals(emp.getGender()) && emp.isActiveStatus())
                 .collect(Collectors.toList());
     }
 
     public List<Employee> findByPageAndSize(Integer page, Integer size){
-        return employees.subList(Math.min(page * size, employees.size()), Math.min(page * size + size, employees.size()));
+        return employees.stream()
+                .filter(Employee::isActiveStatus)
+                .skip((long) page * size)
+                .limit(size)
+                .collect(Collectors.toList());
     }
 
     public void updateName(Employee employee, String name) {
@@ -69,7 +76,7 @@ public class EmployeeRepository {
         }
     }
 
-    public void deleteById(long id) {
-        employees.removeIf(emp -> emp.getId() == id);
+    public void deleteEmployee(Employee employee) {
+        employee.setActiveStatus(false);
     }
 }

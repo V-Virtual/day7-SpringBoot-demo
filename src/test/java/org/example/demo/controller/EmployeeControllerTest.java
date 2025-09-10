@@ -4,7 +4,6 @@ import org.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,8 +21,6 @@ class EmployeeControllerTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-    @Autowired
-    private HttpMessageConverters messageConverters;
 
     @BeforeEach
     void setUp() {
@@ -362,5 +359,13 @@ class EmployeeControllerTest {
                         .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Employee salary cannot be less than 20000 for age over 30"));
+    }
+
+    @Test
+    void should_throw_exception_when_delete_employee_given_non_existing_employee_id() throws Exception {
+        mockMvc.perform(delete("/employees/{id}", 5)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Employee with id 5 not found"));
     }
 }

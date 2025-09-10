@@ -52,6 +52,10 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(long id) {
-        employeeRepository.deleteById(id);
+        Employee employee = getEmployee(id);
+        if(employee == null){
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found");
+        }
+        employeeRepository.deleteEmployee(employee);
     }
 }
