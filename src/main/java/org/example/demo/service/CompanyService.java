@@ -1,56 +1,41 @@
 package org.example.demo.service;
 
 import org.example.demo.model.Company;
+import org.example.demo.repository.CompanyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CompanyService {
 
-    private long id = 0;
-    private final List<Company> companies = new ArrayList<>();
-
-    public void setUp(){
-        id = 0;
-        companies.clear();
-    }
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public Company createCompany(Company company) {
-        company.setId(++id);
-        companies.add(company);
-        return company;
+        return companyRepository.save(company);
     }
 
     public List<Company> getCompanies(Integer page, Integer size){
-        List<Company> result = companies;
         if (page != null && size != null) {
-            int fromIndex = Math.min(page * size, result.size());
-            int toIndex = Math.min(fromIndex + size, result.size());
-            result = result.subList(fromIndex, toIndex);
+            return companyRepository.findByPageAndSize(page, size);
         }
-        return result;
+        return companyRepository.findAll();
     }
 
     public Company getCompany(long id) {
-        return companies.stream()
-                .filter(emp -> emp.getId() == id)
-                .findFirst()
-                .orElse(null);
+        return companyRepository.findById(id);
     }
 
-    public Company updateCompany(long id, java.util.Map<String, Object> updates) {
+    public Company updateCompany(long id, Map<String, Object> updates) {
         Company company = getCompany(id);
-        if (company != null) {
-            if (updates.containsKey("name")) {
-                company.setName((String) updates.get("name"));
-            }
-        }
+        companyRepository.updateName(company, (String) updates.get("name"));
         return company;
     }
 
     public void deleteCompany(long id) {
-        companies.removeIf(emp -> emp.getId() == id);
+        companyRepository.deleteById(id);
     }
 }

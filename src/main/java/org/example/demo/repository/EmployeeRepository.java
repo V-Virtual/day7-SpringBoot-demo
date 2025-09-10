@@ -32,19 +32,17 @@ public class EmployeeRepository {
     }
 
     public List<Employee> findAll() {
-        return new ArrayList<>(employees);
+        return employees;
     }
 
     public List<Employee> findByGender(String gender){
-        List<Employee> result = employees;
-        return result.stream()
+        return employees.stream()
                 .filter(emp -> gender.equals(emp.getGender()))
                 .collect(Collectors.toList());
     }
 
     public List<Employee> findByPageAndSize(Integer page, Integer size){
-        List<Employee> result = employees;
-        return result.subList(Math.min(page * size, result.size()), Math.min(page * size + size, result.size()));
+        return employees.subList(Math.min(page * size, employees.size()), Math.min(page * size + size, employees.size()));
     }
 
     public void updateName(Employee employee, String name) {
