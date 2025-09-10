@@ -24,7 +24,7 @@ class EmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
-        employeeController.getEmployees().clear();
+        employeeController.setUp();
     }
 
     @Test

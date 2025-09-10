@@ -11,20 +11,22 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+@RequestMapping("employees")
 @RestController
 public class EmployeeController {
 
+    private int id = 0;
     private final List<Employee> employees = new ArrayList<>();
 
-    @PostMapping("/employees")
+    @PostMapping
     @ResponseStatus(CREATED)
     public Employee createEmployee(@RequestBody Employee employee) {
-        employee.setId(employees.size() + 1);
+        employee.setId(++id);
         employees.add(employee);
         return employee;
     }
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     public Employee getEmployee(@PathVariable long id) {
         return employees.stream()
                 .filter(emp -> emp.getId() == id)
@@ -32,7 +34,7 @@ public class EmployeeController {
                 .orElse(null);
     }
 
-    @GetMapping("/employees")
+    @GetMapping
     public List<Employee> getEmployees(
             @RequestParam(required = false) String gender,
             @RequestParam(required = false) Integer page,
@@ -51,11 +53,11 @@ public class EmployeeController {
         return result;
     }
 
-    @PutMapping("/employees/{id}")
+    @PutMapping("/{id}")
     public Employee updateEmployee(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         Employee employee = getEmployee(id);
         if (employee != null) {
-            if (updates.containsKey("name")) {
+            if (updates.containsKey("name")) {//refactor
                 employee.setName((String) updates.get("name"));
             }
             if (updates.containsKey("age")) {
@@ -71,13 +73,14 @@ public class EmployeeController {
         return employee;
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable long id) {
         employees.removeIf(emp -> emp.getId() == id);
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    public void setUp(){
+        id = 0;
+        employees.clear();
     }
 }
