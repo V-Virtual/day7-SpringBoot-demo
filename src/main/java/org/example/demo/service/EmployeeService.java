@@ -15,6 +15,9 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public Employee createEmployee(Employee employee) {
+        if (employee.getAge() < 18 || employee.getAge() > 65) {
+            throw new EmployeeNotAmongLegalAgeException("Employee age must be between 18 and 65");
+        }
         return employeeRepository.save(employee);
     }
 
