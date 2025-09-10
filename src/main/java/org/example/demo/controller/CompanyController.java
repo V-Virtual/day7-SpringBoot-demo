@@ -1,31 +1,31 @@
 package org.example.demo.controller;
 
 import org.example.demo.model.Company;
-import org.example.demo.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
+@RequestMapping("/companies")
 public class CompanyController {
 
+    private int id = 0;
     private final List<Company> companies = new ArrayList<>();
 
-    @PostMapping("/companies")
+    @PostMapping
     @ResponseStatus(CREATED)
     public Company createCompanies(@RequestBody Company company) {
-        company.setId(companies.size() + 1);
+        company.setId(++id);
         companies.add(company);
         return company;
     }
 
-    @GetMapping("/companies")
+    @GetMapping
     public List<Company> getCompanies(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
@@ -38,7 +38,7 @@ public class CompanyController {
         return result;
     }
 
-    @GetMapping("/companies/{id}")
+    @GetMapping("/{id}")
     public Company getCompany(@PathVariable long id) {
         return companies.stream()
                 .filter(emp -> emp.getId() == id)
@@ -46,11 +46,7 @@ public class CompanyController {
                 .orElse(null);
     }
 
-    public List<Company> getCompanies() {
-        return companies;
-    }
-
-    @PutMapping("companies/{id}")
+    @PutMapping("/{id}")
     public Company updateCompany(@PathVariable long id, @RequestBody Map<String, Object> updates){
         Company company = getCompany(id);
         if (company != null) {
@@ -61,9 +57,14 @@ public class CompanyController {
         return company;
     }
 
-    @DeleteMapping("/companies/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompany(@PathVariable long id) {
         companies.removeIf(emp -> emp.getId() == id);
+    }
+
+    public void setUp(){
+        id = 0;
+        companies.clear();
     }
 }

@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-@RequestMapping("employees")
 @RestController
+@RequestMapping("/employees")
 public class EmployeeController {
 
     private int id = 0;
