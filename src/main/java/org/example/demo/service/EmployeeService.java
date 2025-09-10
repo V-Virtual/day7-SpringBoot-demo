@@ -14,6 +14,11 @@ public class EmployeeService {
     private long id = 0;
     private final List<Employee> employees = new ArrayList<>();
 
+    public void setUp(){
+        id = 0;
+        employees.clear();
+    }
+
     public Employee createEmployee(Employee employee) {
         employee.setId(++id);
         employees.add(employee);
@@ -63,10 +68,5 @@ public class EmployeeService {
 
     public void deleteEmployee(long id) {
         employees.removeIf(emp -> emp.getId() == id);
-    }
-
-    public void setUp(){
-        id = 0;
-        employees.clear();
     }
 }
