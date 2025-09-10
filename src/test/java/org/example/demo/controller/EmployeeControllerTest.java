@@ -220,7 +220,7 @@ class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
         mockMvc.perform(get("/employees/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
@@ -301,5 +301,13 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$[0].age").value(25))
                 .andExpect(jsonPath("$[0].gender").value("Female"))
                 .andExpect(jsonPath("$[0].salary").value(10000.0));
+    }
+
+    @Test
+    void should_return_no_content_when_get_employee_given_non_existing_employee_id() throws Exception {
+        mockMvc.perform(get("/employees/{id}", 5)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 }

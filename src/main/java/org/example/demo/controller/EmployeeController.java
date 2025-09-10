@@ -5,6 +5,7 @@ import org.example.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,13 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public Employee getEmployee(@PathVariable long id) {
-        return employeeService.getEmployee(id);
+        Employee employee;
+        try {
+            employee = employeeService.getEmployee(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+        return employee;
     }
 
     @GetMapping

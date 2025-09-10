@@ -22,7 +22,11 @@ public class EmployeeService {
     }
 
     public Employee getEmployee(long id) {
-        return employeeRepository.findById(id);
+        Employee employee = employeeRepository.findById(id);
+        if (employee == null) {
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found");
+        }
+        return employee;
     }
 
     public List<Employee> getEmployees(String gender, Integer page, Integer size){
