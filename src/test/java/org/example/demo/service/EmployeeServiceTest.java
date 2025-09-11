@@ -101,9 +101,6 @@ class EmployeeServiceTest {
         });
         assertEquals("Update failed, the Employee has already left the company", exception.getMessage());
         verify(employeeRepository, times(1)).findById(anyLong());
-        verify(employeeRepository, never()).updateName(any(Employee.class), anyString());
-        verify(employeeRepository, never()).updateAge(any(Employee.class), anyInt());
-        verify(employeeRepository, never()).updateGender(any(Employee.class), anyString());
-        verify(employeeRepository, never()).updateSalary(any(Employee.class), anyDouble());
+        verify(employeeRepository, never()).updateEmployee(any(Employee.class), any());
     }
 }
