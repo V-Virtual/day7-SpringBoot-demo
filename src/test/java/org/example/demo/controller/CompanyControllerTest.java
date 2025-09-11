@@ -1,7 +1,10 @@
 package org.example.demo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.demo.model.Company;
+import org.example.demo.model.Employee;
 import org.example.demo.repository.CompanyRepository;
+import org.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ class CompanyControllerTest {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @BeforeEach
     void setUp() {
@@ -193,5 +199,41 @@ class CompanyControllerTest {
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    void should_update_employee_when_update_given_a_valid_employee() throws Exception {
+        Company company = new Company();
+        company.setName("oocl");
+        companyRepository.save(company);
+
+        Employee employee = new Employee();
+        employee.setName("Tom");
+        employee.setAge(20);
+        employee.setGender("Male");
+        employee.setSalary(20000.0);
+        employee.setActiveStatus(true);
+        employee.setCompanyId(company.getId());
+        employeeRepository.save(employee);
+
+        String updateRequestBody = """
+                {
+                    "name": "Jerry",
+                    "age": 18,
+                    "gender": "Female",
+                    "salary": 30000.0
+                }
+                """;
+        mockMvc.perform(put("/employees/{id}", employee.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateRequestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(employee.getId()))
+                .andExpect(jsonPath("$.name").value("Jerry"))
+                .andExpect(jsonPath("$.age").value(18))
+                .andExpect(jsonPath("$.gender").value("Female"))
+                .andExpect(jsonPath("$.salary").value(30000.0))
+                .andExpect(jsonPath("$.activeStatus").value(true))
+                .andExpect(jsonPath("$.companyId").value(company.getId()));
     }
 }

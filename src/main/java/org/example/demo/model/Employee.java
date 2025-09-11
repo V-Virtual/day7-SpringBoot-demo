@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "t_employee")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -13,6 +14,9 @@ public class Employee {
     private String gender;
     private double salary;
     private boolean activeStatus;
+
+    @Column(name = "company_id")
+    private long companyId;
 
     public long getId() {
         return id;
@@ -60,5 +64,13 @@ public class Employee {
 
     public void setActiveStatus(boolean activeStatus) {
         this.activeStatus = activeStatus;
+    }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
     }
 }
