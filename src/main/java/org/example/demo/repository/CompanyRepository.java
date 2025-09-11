@@ -3,7 +3,6 @@ package org.example.demo.repository;
 import org.example.demo.model.Company;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -19,7 +18,7 @@ public interface CompanyRepository {
 
     List<Company> findByPageAndSize(Integer page, Integer size);
 
-    void updateName(Company company, String name);
+    void updateCompany(Company company, Company updateCompany);
 
     void deleteById(long id);
 }

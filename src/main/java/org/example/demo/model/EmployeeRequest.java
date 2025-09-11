@@ -1,40 +1,12 @@
 package org.example.demo.model;
 
-import jakarta.persistence.*;
+public class EmployeeRequest {
 
-@Entity
-@Table(name = "t_employee")
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String name;
     private int age;
     private String gender;
     private double salary;
-    private boolean active;
-
-    @Column(name = "company_id")
     private long companyId;
-
-    public Employee(){}
-
-    public Employee(EmployeeRequest employeeRequest) {
-        this.name = employeeRequest.getName();
-        this.age = employeeRequest.getAge();
-        this.gender = employeeRequest.getGender();
-        this.salary = employeeRequest.getSalary();
-        this.companyId = employeeRequest.getCompanyId();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -66,14 +38,6 @@ public class Employee {
 
     public void setSalary(double salary) {
         this.salary = salary;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public long getCompanyId() {

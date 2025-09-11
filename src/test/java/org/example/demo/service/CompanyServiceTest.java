@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -111,15 +110,17 @@ class CompanyServiceTest {
         when(companyRepository.findById(1L)).thenReturn(company);
         doAnswer(invocation -> {
             Company comp = invocation.getArgument(0);
-            String newName = invocation.getArgument(1);
-            comp.setName(newName);
+            Company updates = invocation.getArgument(1);
+            if (updates.getName() != null) {
+                comp.setName(updates.getName());
+            }
             return null;
-        }).when(companyRepository).updateName(eq(company), anyString());
+        }).when(companyRepository).updateCompany(eq(company), any());
         Company updates = new Company();
         updates.setName("NewTechCorp");
         Company updatedCompany = companyService.updateCompany(1, updates);
         assertEquals("NewTechCorp", updatedCompany.getName());
-        verify(companyRepository, times(1)).findById(1L);
-        verify(companyRepository, times(1)).updateName(eq(company), eq("NewTechCorp"));
+        verify(companyRepository, times(1)).findById(1);
+        verify(companyRepository, times(1)).updateCompany(eq(company), eq(updates));
     }
 }

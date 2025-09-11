@@ -36,9 +36,9 @@ public class CompanyRepositoryInmemoryImpl implements CompanyRepository {
         return companies.subList(Math.min(page * size, companies.size()), Math.min(page * size + size, companies.size()));
     }
 
-    public void updateName(Company company, String name) {
-        if (company != null) {
-            company.setName(name);
+    public void updateCompany(Company company, Company updateCompany) {
+        if (updateCompany.getName() != null) {
+            company.setName(updateCompany.getName());
         }
     }
 

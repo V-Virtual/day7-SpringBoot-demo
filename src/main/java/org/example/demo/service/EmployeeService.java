@@ -41,12 +41,12 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee updateEmployee(long id, Employee updates) {
+    public Employee updateEmployee(long id, Employee updateEmployee) {
         Employee employee = getEmployee(id);
         if (!employee.isActive()) {
             throw new EmployeeNotAmongLegalException("Update failed, the Employee has already left the company");
         }
-        employeeRepository.updateEmployee(employee, updates);
+        employeeRepository.updateEmployee(employee, updateEmployee);
         return employee;
     }
 

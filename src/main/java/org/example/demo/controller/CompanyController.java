@@ -1,13 +1,13 @@
 package org.example.demo.controller;
 
 import org.example.demo.model.Company;
+import org.example.demo.model.CompanyRequest;
 import org.example.demo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -20,7 +20,8 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Company createCompanies(@RequestBody Company company) {
+    public Company createCompanies(@RequestBody CompanyRequest companyRequest) {
+        Company company = new Company(companyRequest);
         return companyService.createCompany(company);
     }
 
@@ -37,8 +38,9 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable long id, @RequestBody Company updates) {
-        return companyService.updateCompany(id, updates);
+    public Company updateCompany(@PathVariable long id, @RequestBody CompanyRequest updateCompanyRequest) {
+        Company updateCompany = new Company(updateCompanyRequest);
+        return companyService.updateCompany(id, updateCompany);
     }
 
     @DeleteMapping("/{id}")

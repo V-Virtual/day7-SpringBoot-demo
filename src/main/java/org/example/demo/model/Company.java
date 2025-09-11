@@ -18,6 +18,12 @@ public class Company {
     @JoinColumn(name = "company_id")
     private List<Employee> employees = new ArrayList<>();
 
+    public Company() {}
+
+    public Company(CompanyRequest companyRequest) {
+        this.name = companyRequest.getName();
+    }
+
     public long getId() {
         return id;
     }

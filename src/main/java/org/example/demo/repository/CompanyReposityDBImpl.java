@@ -44,11 +44,11 @@ public class CompanyReposityDBImpl implements CompanyRepository {
     }
 
     @Override
-    public void updateName(Company company, String name) {
-        if (company != null) {
-            company.setName(name);
-            companyJpaRepository.save(company);
+    public void updateCompany(Company company, Company updateCompany) {
+        if (updateCompany.getName() != null) {
+            company.setName(updateCompany.getName());
         }
+        companyJpaRepository.save(company);
     }
 
     public void deleteById(long id) {
