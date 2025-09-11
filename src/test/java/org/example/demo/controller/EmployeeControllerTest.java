@@ -1,6 +1,8 @@
 package org.example.demo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.demo.model.Company;
+import org.example.demo.repository.CompanyRepository;
 import org.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,9 @@ class EmployeeControllerTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     @BeforeEach
     void setUp() {
         employeeRepository.setUp();
@@ -41,14 +46,18 @@ class EmployeeControllerTest {
 
     @Test
     void should_return_employee_when_create_given_a_valid_body() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id = createEmployee(requestBody);
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -59,23 +68,28 @@ class EmployeeControllerTest {
 
     @Test
     void should_return_employee_when_get_employee_given_employee_id() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody1 = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id = createEmployee(requestBody1);
         String requestBody2 = """
                 {
                      "name": "Lily",
                      "age": 20,
                      "gender": "Female",
-                     "salary": 8000.0
+                     "salary": 8000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody2));
@@ -91,32 +105,38 @@ class EmployeeControllerTest {
 
     @Test
     void should_return_employee_list_when_query_employee_given_employee_gender() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody1 = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id1 = createEmployee(requestBody1);
         String requestBody2 = """
                 {
                      "name": "Lily",
                      "age": 20,
                      "gender": "Female",
-                     "salary": 8000.0
+                     "salary": 8000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id2 = createEmployee(requestBody2);
         String requestBody3 = """
                 {
                      "name": "Lucy",
                      "age": 25,
                      "gender": "Female",
-                     "salary": 10000.0
+                     "salary": 10000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id3 = createEmployee(requestBody3);
         mockMvc.perform(get("/employees?gender=Female")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -136,23 +156,28 @@ class EmployeeControllerTest {
 
     @Test
     void should_return_employee_list_when_get_all_employees() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody1 = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id1 = createEmployee(requestBody1);
         String requestBody2 = """
                 {
                      "name": "Lily",
                      "age": 20,
                      "gender": "Female",
-                     "salary": 8000.0
+                     "salary": 8000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id2 = createEmployee(requestBody2);
         mockMvc.perform(get("/employees")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -172,14 +197,18 @@ class EmployeeControllerTest {
 
     @Test
     void should_return_employee_when_update_employee_given_a_valid_body() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody1 = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id = createEmployee(requestBody1);
         String requestBody2 = """
                 {
@@ -202,14 +231,18 @@ class EmployeeControllerTest {
 
     @Test
     void should_return_no_content_when_delete_employee_given_employee_id() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id = createEmployee(requestBody);
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -225,19 +258,23 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.age").value(32))
                 .andExpect(jsonPath("$.gender").value("Male"))
                 .andExpect(jsonPath("$.salary").value(50000.0))
-                .andExpect(jsonPath("$.activeStatus").value(false));
+                .andExpect(jsonPath("$.active").value(false));
     }
 
     @Test
     void should_return_employee_list_when_get_employees_given_page_and_size() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody1 = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody1));
@@ -246,9 +283,10 @@ class EmployeeControllerTest {
                      "name": "Lily",
                      "age": 20,
                      "gender": "Female",
-                     "salary": 8000.0
+                     "salary": 8000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody2));
@@ -257,9 +295,10 @@ class EmployeeControllerTest {
                      "name": "Lucy",
                      "age": 25,
                      "gender": "Female",
-                     "salary": 10000.0
+                     "salary": 10000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody3));
@@ -268,9 +307,10 @@ class EmployeeControllerTest {
                     "name": "Frank",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody4));
@@ -279,9 +319,10 @@ class EmployeeControllerTest {
                      "name": "Jake",
                      "age": 20,
                      "gender": "Female",
-                     "salary": 8000.0
+                     "salary": 8000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody5));
@@ -290,9 +331,10 @@ class EmployeeControllerTest {
                      "name": "Paul",
                      "age": 25,
                      "gender": "Female",
-                     "salary": 10000.0
+                     "salary": 10000.0,
+                     "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id = createEmployee(requestBody6);
         mockMvc.perform(get("/employees?page=1&size=5")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -374,14 +416,18 @@ class EmployeeControllerTest {
 
     @Test
     void should_throw_exception_when_update_employee_given_non_existing_employee_id() throws Exception {
+        Company company = new Company();
+        company.setName("apple");
+        companyRepository.save(company);
         String requestBody = """
                 {
                     "name": "John Smith",
                     "age": 32,
                     "gender": "Male",
-                    "salary": 50000.0
+                    "salary": 50000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(company.getId());
         long id = createEmployee(requestBody);
         mockMvc.perform(delete("/employees/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON));

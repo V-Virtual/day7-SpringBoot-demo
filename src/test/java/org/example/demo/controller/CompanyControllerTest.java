@@ -204,7 +204,7 @@ class CompanyControllerTest {
     @Test
     void should_update_employee_when_update_given_a_valid_employee() throws Exception {
         Company company = new Company();
-        company.setName("oocl");
+        company.setName("apple");
         companyRepository.save(company);
 
         Employee employee = new Employee();
@@ -212,7 +212,7 @@ class CompanyControllerTest {
         employee.setAge(20);
         employee.setGender("Male");
         employee.setSalary(20000.0);
-        employee.setActiveStatus(true);
+        employee.setActive(true);
         employee.setCompanyId(company.getId());
         employeeRepository.save(employee);
 
@@ -233,7 +233,7 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.age").value(18))
                 .andExpect(jsonPath("$.gender").value("Female"))
                 .andExpect(jsonPath("$.salary").value(30000.0))
-                .andExpect(jsonPath("$.activeStatus").value(true))
+                .andExpect(jsonPath("$.active").value(true))
                 .andExpect(jsonPath("$.companyId").value(company.getId()));
     }
 }

@@ -26,12 +26,16 @@ public class CompanyService {
     }
 
     public Company getCompany(long id) {
-        return companyRepository.findById(id);
+        Company company = companyRepository.findById(id);
+        if (company == null) {
+            throw new CompanyNotFoundException("Company with id " + id + " not found");
+        }
+        return company;
     }
 
-    public Company updateCompany(long id, Map<String, Object> updates) {
+    public Company updateCompany(long id, Company updates) {
         Company company = getCompany(id);
-        companyRepository.updateName(company, (String) updates.get("name"));
+        companyRepository.updateName(company, updates.getName());
         return company;
     }
 

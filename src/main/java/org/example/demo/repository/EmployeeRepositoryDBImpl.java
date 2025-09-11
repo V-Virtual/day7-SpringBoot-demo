@@ -21,7 +21,7 @@ public class EmployeeRepositoryDBImpl implements EmployeeRepository {
 
     @Override
     public Employee save(Employee employee) {
-        employee.setActiveStatus(true);
+        employee.setActive(true);
         employeeJpaRepository.save(employee);
         return employee;
     }
@@ -68,7 +68,7 @@ public class EmployeeRepositoryDBImpl implements EmployeeRepository {
 
     @Override
     public void deleteEmployee(Employee employee) {
-        employee.setActiveStatus(false);
+        employee.setActive(false);
         employeeJpaRepository.save(employee);
     }
 }

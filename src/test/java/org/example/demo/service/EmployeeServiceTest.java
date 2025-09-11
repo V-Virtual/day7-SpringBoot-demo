@@ -94,7 +94,7 @@ class EmployeeServiceTest {
         employee.setAge(35);
         employee.setGender("Male");
         employee.setSalary(15000.0);
-        employee.setActiveStatus(false);
+        employee.setActive(false);
         when(employeeRepository.findById(anyLong())).thenReturn(employee);
         Exception exception = assertThrows(EmployeeNotAmongLegalException.class, () -> {
             employeeService.updateEmployee(1, null);

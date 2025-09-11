@@ -19,7 +19,7 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
     @Override
     public Employee save(Employee employee) {
         employee.setId(++id);
-        employee.setActiveStatus(true);
+        employee.setActive(true);
         employees.add(employee);
         return employee;
     }
@@ -70,6 +70,6 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
 
     @Override
     public void deleteEmployee(Employee employee) {
-        employee.setActiveStatus(false);
+        employee.setActive(false);
     }
 }

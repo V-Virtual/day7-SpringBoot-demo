@@ -43,7 +43,7 @@ public class EmployeeService {
 
     public Employee updateEmployee(long id, Employee updates) {
         Employee employee = getEmployee(id);
-        if (!employee.isActiveStatus()) {
+        if (!employee.isActive()) {
             throw new EmployeeNotAmongLegalException("Update failed, the Employee has already left the company");
         }
         employeeRepository.updateEmployee(employee, updates);
@@ -52,9 +52,6 @@ public class EmployeeService {
 
     public void deleteEmployee(long id) {
         Employee employee = getEmployee(id);
-        if (employee == null) {
-            throw new EmployeeNotFoundException("Employee with id " + id + " not found");
-        }
         employeeRepository.deleteEmployee(employee);
     }
 }
