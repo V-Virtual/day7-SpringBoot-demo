@@ -8,9 +8,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository {
 
-    default void setUp() {
-
-    }
+    void setUp();
 
     Employee save(Employee employee);
 

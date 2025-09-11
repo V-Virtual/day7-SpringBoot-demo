@@ -18,7 +18,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public List<Company> getCompanies(Integer page, Integer size){
+    public List<Company> getCompanies(Integer page, Integer size) {
         if (page != null && size != null) {
             return companyRepository.findByPageAndSize(page, size);
         }

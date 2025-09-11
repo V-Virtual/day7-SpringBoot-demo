@@ -12,7 +12,7 @@ public class CompanyRepository {
     private long id = 0;
     private final List<Company> companies = new ArrayList<>();
 
-    public void setUp(){
+    public void setUp() {
         id = 0;
         companies.clear();
     }
@@ -34,7 +34,7 @@ public class CompanyRepository {
         return companies;
     }
 
-    public List<Company> findByPageAndSize(Integer page, Integer size){
+    public List<Company> findByPageAndSize(Integer page, Integer size) {
         return companies.subList(Math.min(page * size, companies.size()), Math.min(page * size + size, companies.size()));
     }
 

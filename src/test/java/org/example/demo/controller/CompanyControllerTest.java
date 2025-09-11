@@ -50,8 +50,8 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody1));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody1));
 
         String requestBody2 = """
                 {
@@ -59,8 +59,8 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody2));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody2));
 
         mockMvc.perform(get("/companies")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -80,8 +80,8 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody1));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody1));
 
         String requestBody2 = """
                 {
@@ -89,32 +89,32 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody2));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody2));
         String requestBody3 = """
                 {
                     "name": "microsoft"
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody3));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody3));
         String requestBody4 = """
                 {
                     "name": "amazon"
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody4));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody4));
         String requestBody5 = """
                 {
                     "name": "facebook"
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody5));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody5));
         String requestBody6 = """
                 {
                     "name": "tesla"
@@ -140,8 +140,8 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
 
         mockMvc.perform(get("/companies/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -158,8 +158,8 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
 
         String updateRequestBody = """
                 {
@@ -182,8 +182,8 @@ class CompanyControllerTest {
                 }
                 """;
         mockMvc.perform(post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
 
         mockMvc.perform(delete("/companies/1")
                         .contentType(MediaType.APPLICATION_JSON))

@@ -37,7 +37,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable long id, @RequestBody Map<String, Object> updates){
+    public Company updateCompany(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         return companyService.updateCompany(id, updates);
     }
 

@@ -32,7 +32,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void should_throw_exception_when_create_given_employee_with_age_66(){
+    void should_throw_exception_when_create_given_employee_with_age_66() {
         Employee employee = new Employee();
         employee.setName("John");
         employee.setAge(66);

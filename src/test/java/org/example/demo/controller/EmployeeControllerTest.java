@@ -51,8 +51,8 @@ class EmployeeControllerTest {
                 """;
         long id = createEmployee(requestBody);
         mockMvc.perform(post("/employees")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(id + 1));
     }
@@ -80,7 +80,7 @@ class EmployeeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody2));
         mockMvc.perform(get("/employees/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("John Smith"))
@@ -190,8 +190,8 @@ class EmployeeControllerTest {
                 }
                 """;
         mockMvc.perform(put("/employees/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody2))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody2))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("Lily"))
@@ -215,10 +215,10 @@ class EmployeeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody));
         mockMvc.perform(delete("/employees/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
         mockMvc.perform(get("/employees/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("John Smith"))
@@ -308,7 +308,7 @@ class EmployeeControllerTest {
     @Test
     void should_return_no_content_when_get_employee_given_non_existing_employee_id() throws Exception {
         mockMvc.perform(get("/employees/{id}", 99)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Employee with id 99 not found"));
     }
