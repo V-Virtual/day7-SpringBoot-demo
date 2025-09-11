@@ -1,1 +1,14 @@
-spring.application.name=demo
+
+spring:
+    application:
+        name: demo
+    datasource:
+        url: jdbc:mysql://localhost:3306/db_springboot
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: "root"
+        password: "duotui123@ZGH"
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop

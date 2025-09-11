@@ -13,7 +13,7 @@ public class EmployeeRepository {
     private long id = 0;
     private final List<Employee> employees = new ArrayList<>();
 
-    public void setUp(){
+    public void setUp() {
         id = 0;
         employees.clear();
     }
@@ -36,40 +36,31 @@ public class EmployeeRepository {
         return employees;
     }
 
-    public List<Employee> findByGender(String gender){
+    public List<Employee> findByGender(String gender) {
         return employees.stream()
                 .filter(emp -> gender.equals(emp.getGender()))
                 .collect(Collectors.toList());
     }
 
-    public List<Employee> findByPageAndSize(Integer page, Integer size){
+    public List<Employee> findByPageAndSize(Integer page, Integer size) {
         return employees.stream()
                 .skip((long) page * size)
                 .limit(size)
                 .collect(Collectors.toList());
     }
 
-    public void updateName(Employee employee, String name) {
-        if (employee != null) {
-            employee.setName(name);
+    public void updateEmployee(Employee employee, Employee updatedEmployee) {
+        if (!updatedEmployee.getName().isEmpty()) {
+            employee.setName(updatedEmployee.getName());
         }
-    }
-
-    public void updateAge(Employee employee, int age) {
-        if (employee != null) {
-            employee.setAge(age);
+        if (updatedEmployee.getAge() != 0) {
+            employee.setAge(updatedEmployee.getAge());
         }
-    }
-
-    public void updateGender(Employee employee, String gender){
-        if (employee != null) {
-            employee.setGender(gender);
+        if (!updatedEmployee.getGender().isEmpty()) {
+            employee.setGender(updatedEmployee.getGender());
         }
-    }
-
-    public void updateSalary(Employee employee, double salary) {
-        if (employee != null) {
-            employee.setSalary(salary);
+        if (updatedEmployee.getSalary() != 0) {
+            employee.setSalary(updatedEmployee.getSalary());
         }
     }
 

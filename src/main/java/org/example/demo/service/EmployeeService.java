@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class EmployeeService {
@@ -18,7 +17,7 @@ public class EmployeeService {
         if (employee.getAge() < 18 || employee.getAge() > 65) {
             throw new EmployeeNotAmongLegalException("Employee age must be between 18 and 65");
         }
-        if(employee.getAge() > 30 && employee.getSalary() < 20000){
+        if (employee.getAge() >= 30 && employee.getSalary() < 20000) {//TODO >=
             throw new EmployeeNotAmongLegalException("Employee salary cannot be less than 20000 for age over 30");
         }
         return employeeRepository.save(employee);
@@ -32,7 +31,7 @@ public class EmployeeService {
         return employee;
     }
 
-    public List<Employee> getEmployees(String gender, Integer page, Integer size){
+    public List<Employee> getEmployees(String gender, Integer page, Integer size) {
         if (gender != null) {
             return employeeRepository.findByGender(gender);
         }
@@ -42,24 +41,18 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee updateEmployee(long id, Map<String, Object> updates) {
+    public Employee updateEmployee(long id, Employee updates) {
         Employee employee = getEmployee(id);
-        if(employee == null){
-            throw new EmployeeNotFoundException("Employee with id " + id + " not found");
-        }
-        if(!employee.isActiveStatus()){
+        if (!employee.isActiveStatus()) {
             throw new EmployeeNotAmongLegalException("Update failed, the Employee has already left the company");
         }
-        employeeRepository.updateName(employee, (String) updates.get("name"));
-        employeeRepository.updateAge(employee, (Integer) updates.get("age"));
-        employeeRepository.updateGender(employee, (String) updates.get("gender"));
-        employeeRepository.updateSalary(employee, (Double) updates.get("salary"));
+        employeeRepository.updateEmployee(employee, updates);
         return employee;
     }
 
     public void deleteEmployee(long id) {
         Employee employee = getEmployee(id);
-        if(employee == null){
+        if (employee == null) {
             throw new EmployeeNotFoundException("Employee with id " + id + " not found");
         }
         employeeRepository.deleteEmployee(employee);

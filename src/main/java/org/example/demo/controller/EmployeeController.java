@@ -36,7 +36,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee updates) {
         return ResponseEntity.status(HttpStatus.OK).body(employeeService.updateEmployee(id, updates));
     }
 
