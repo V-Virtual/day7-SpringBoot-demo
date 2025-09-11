@@ -14,6 +14,7 @@ public class EmployeeRepositoryDBImpl implements EmployeeRepository {
     @Autowired
     private EmployeeJpaRepository employeeJpaRepository;
 
+    @Override
     public void setUp() {
         employeeJpaRepository.deleteAll();
     }

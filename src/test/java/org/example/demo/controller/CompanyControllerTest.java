@@ -1,5 +1,6 @@
 package org.example.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.demo.repository.CompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,6 +31,15 @@ class CompanyControllerTest {
         companyRepository.setUp();
     }
 
+    private long createCompany(String requestBody) throws Exception {
+        ResultActions resultActions = mockMvc.perform((post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)));
+        MvcResult mvcResult = resultActions.andReturn();
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        return new ObjectMapper().readTree(contentAsString).get("id").asLong();
+    }
+
     @Test
     void should_return_company_when_create_given_a_valid_body() throws Exception {
         String requestBody = """
@@ -35,11 +47,12 @@ class CompanyControllerTest {
                     "name": "google"
                 }
                 """;
+        long id = createCompany(requestBody);
         mockMvc.perform(post("/companies")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1));
+                .andExpect(jsonPath("$.id").value(id + 1));
     }
 
     @Test
@@ -49,26 +62,22 @@ class CompanyControllerTest {
                     "name": "google"
                 }
                 """;
-        mockMvc.perform(post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody1));
+        long id1 = createCompany(requestBody1);
 
         String requestBody2 = """
                 {
                     "name": "apple"
                 }
                 """;
-        mockMvc.perform(post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody2));
+        long id2 = createCompany(requestBody2);
 
         mockMvc.perform(get("/companies")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].id").value(id1))
                 .andExpect(jsonPath("$[0].name").value("google"))
-                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].id").value(id2))
                 .andExpect(jsonPath("$[1].name").value("apple"));
     }
 
@@ -120,15 +129,13 @@ class CompanyControllerTest {
                     "name": "tesla"
                 }
                 """;
-        mockMvc.perform(post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody6));
+        long id = createCompany(requestBody6);
 
         mockMvc.perform(get("/companies?page=1&size=5")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(6))
+                .andExpect(jsonPath("$[0].id").value(id))
                 .andExpect(jsonPath("$[0].name").value("tesla"));
     }
 
@@ -139,14 +146,12 @@ class CompanyControllerTest {
                     "name": "google"
                 }
                 """;
-        mockMvc.perform(post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody));
+        long id = createCompany(requestBody);
 
-        mockMvc.perform(get("/companies/1")
+        mockMvc.perform(get("/companies/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("google"));
     }
 
@@ -157,20 +162,18 @@ class CompanyControllerTest {
                     "name": "google"
                 }
                 """;
-        mockMvc.perform(post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody));
+        long id = createCompany(requestBody);
 
         String updateRequestBody = """
                 {
                     "name": "alphabet"
                 }
                 """;
-        mockMvc.perform(put("/companies/1")
+        mockMvc.perform(put("/companies/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateRequestBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("alphabet"));
     }
 
@@ -181,11 +184,9 @@ class CompanyControllerTest {
                     "name": "google"
                 }
                 """;
-        mockMvc.perform(post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody));
+        long id = createCompany(requestBody);
 
-        mockMvc.perform(delete("/companies/1")
+        mockMvc.perform(delete("/companies/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 

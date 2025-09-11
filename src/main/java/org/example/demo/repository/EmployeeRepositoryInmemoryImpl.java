@@ -10,11 +10,13 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
     private long id = 0;
     private final List<Employee> employees = new ArrayList<>();
 
+    @Override
     public void setUp() {
         id = 0;
         employees.clear();
     }
 
+    @Override
     public Employee save(Employee employee) {
         employee.setId(++id);
         employee.setActiveStatus(true);
@@ -22,6 +24,7 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
         return employee;
     }
 
+    @Override
     public Employee findById(long id) {
         return employees.stream()
                 .filter(emp -> emp.getId() == id)
@@ -29,16 +32,19 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
                 .orElse(null);
     }
 
+    @Override
     public List<Employee> findAll() {
         return employees;
     }
 
+    @Override
     public List<Employee> findByGender(String gender) {
         return employees.stream()
                 .filter(emp -> gender.equals(emp.getGender()))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Employee> findByPageAndSize(Integer page, Integer size) {
         return employees.stream()
                 .skip((long) page * size)
@@ -46,6 +52,7 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void updateEmployee(Employee employee, Employee updatedEmployee) {
         if (!updatedEmployee.getName().isEmpty()) {
             employee.setName(updatedEmployee.getName());
@@ -61,6 +68,7 @@ public class EmployeeRepositoryInmemoryImpl implements EmployeeRepository {
         }
     }
 
+    @Override
     public void deleteEmployee(Employee employee) {
         employee.setActiveStatus(false);
     }

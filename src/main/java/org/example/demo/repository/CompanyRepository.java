@@ -7,44 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CompanyRepository {
+public interface CompanyRepository {
 
-    private long id = 0;
-    private final List<Company> companies = new ArrayList<>();
+    void setUp();
 
-    public void setUp() {
-        id = 0;
-        companies.clear();
-    }
+    Company save(Company company);
 
-    public Company save(Company company) {
-        company.setId(++id);
-        companies.add(company);
-        return company;
-    }
+    Company findById(long id);
 
-    public Company findById(long id) {
-        return companies.stream()
-                .filter(comp -> comp.getId() == id)
-                .findFirst()
-                .orElse(null);
-    }
+    List<Company> findAll();
 
-    public List<Company> findAll() {
-        return companies;
-    }
+    List<Company> findByPageAndSize(Integer page, Integer size);
 
-    public List<Company> findByPageAndSize(Integer page, Integer size) {
-        return companies.subList(Math.min(page * size, companies.size()), Math.min(page * size + size, companies.size()));
-    }
+    void updateName(Company company, String name);
 
-    public void updateName(Company company, String name) {
-        if (company != null) {
-            company.setName(name);
-        }
-    }
-
-    public void deleteById(long id) {
-        companies.removeIf(comp -> comp.getId() == id);
-    }
+    void deleteById(long id);
 }
